@@ -1,0 +1,75 @@
+function start() {
+  // present initial list of menu options
+}
+
+function viewAllEmplayees(){
+
+}
+
+
+
+
+
+const mysql = require("mysql2");
+const connection = require("./config")
+
+const db = mysql.createConnection(connection)
+
+
+function getAllEmployees() {
+  db.query("ENTER QUERY", (err, data) => {    //might need return
+    return data
+  })
+}
+
+module.exports = {    //can import wherever then
+  getAllEmployees
+}
+
+
+
+--------------------------------
+
+const inquirer = require("inquirer")
+
+function start(){
+  inquirer.prompt(listOfOptions).then(
+
+
+  )
+}
+
+function viewAllEmplayees() {
+
+}
+
+
+function displayTableInConsole() {
+  //can call this over and over
+}
+
+
+//look for where you have to do something multi times, use functions
+
+function getAllDepartments() {
+  const allRoles = getAllRoles //make database query - get back array
+  inquirer.prompt([
+    {
+      type: "list",
+      message; "what department is it?",
+      name: "department_id",
+      choices: function(){
+        //can output out array of choices that inquirer should display
+        //array map tranforms data so can make new choices
+        allDepartments.map ( dept => {
+          return {
+            id: dept.id,      //id in db
+            name: dept.name   //name in database - find what it is 
+          }
+        })
+      }
+    }
+  ]).then (response => {      //will be choosing id number even though they are selecting a string
+    //response.department_id
+  })
+}
