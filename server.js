@@ -168,7 +168,7 @@ function addEmployees() {
 
     db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
       VALUES (?, ?, ?, ?)`, [result.newFirst_name, result.newLast_name, result.newRole_id, result.newManager_id], (err, res) => {
-      console.table(viewRoles())
+      console.table(viewEmployees())
       if (err) {
         res.status(400).json({ error: err.message });
         return;
