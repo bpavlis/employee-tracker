@@ -25,7 +25,7 @@ const db = mysql.createConnection(
 );
 
 
-function choices() {
+function start() {
   inquirer.prompt([
     {
       type: "list",
@@ -33,22 +33,22 @@ function choices() {
       name: "optionPicked",
       choices: ["View departments", "View roles", "View employees", "Add department", "Add role", "Add employee", "Update employee's role"],
     }
-  ]) .then(function(results) {
+  ]).then(function (results) {
     //if else statements here
     if (results.optionPicked === "View departments") {
       viewDepartments()
     } else if (results.optionPicked === "View roles") {
-        viewRoles()
+      viewRoles()
     } else if (results.optionPicked === "View employees") {
-        viewEmployees()
+      viewEmployees()
     } else if (results.optionPicked === "Add department") {
-        addDepartments()
+      addDepartments()
     } else if (results.optionPicked === "Add role") {
-        addRoles()
+      addRoles()
     } else if (results.optionPicked === "Add employee") {
-        addEmployees()
+      addEmployees()
     } else if (results.optionPicked === "Update employee's role") {
-        updateEmployeeRole()
+      updateEmployeeRole()
     } else {
       db.end();
     }
@@ -56,42 +56,40 @@ function choices() {
 }
 
 
-
 function viewDepartments() {
-    const view = `SELECT * FROM department`;
-
-    db.query(view, (err, res) => {
-      console.table(res)
-      if (err) {
-        res.status(500).json({ error: err.message });
-         return;
-      }
-    });
+  const view = `SELECT * FROM department`;
+  db.query(view, (err, res) => {
+    console.table(res)
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+  });
 }
+
 
 function viewRoles() {
-    const view = `SELECT * FROM role`;
-
-    db.query(view, (err, res) => {
-      console.table(res)
-      if (err) {
-        res.status(500).json({ error: err.message });
-         return;
-      }
-    });
+  const view = `SELECT * FROM role`;
+  db.query(view, (err, res) => {
+    console.table(res)
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+  });
 }
+
+
 function viewEmployees() {
-    const view = `SELECT * FROM employee`;
-    db.query(view, (err, res) => {
-      
-      if (err) {
-        res.status(500).json({ error: err.message });
-         return;
-      }
-      return console.table(res)
-    });
+  const view = `SELECT * FROM employee`;
+  db.query(view, (err, res) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    return console.table(res)
+  });
 }
-
 
 
 function addDepartments() {
@@ -101,16 +99,17 @@ function addDepartments() {
       message: "Enter the name of the new department:",
       name: "newName",
     }
-  ]).then ((result) => { 
-      db.query(`INSERT INTO department (name) VALUES (?)`, [result.newName], (err, res) => {
-        console.table(viewDepartments())
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }        
-      });
+  ]).then((result) => {
+    db.query(`INSERT INTO department (name) VALUES (?)`, [result.newName], (err, res) => {
+      console.table(viewDepartments())
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
     });
+  });
 }
+
 
 function addRoles() {
   inquirer.prompt([
@@ -129,18 +128,19 @@ function addRoles() {
       message: "Enter the department_id of the new role:",
       name: "newDepartment_id",
     }
-  ]).then ((result) => {
-      
-      db.query(`INSERT INTO role (title, salary, department_id)
+  ]).then((result) => {
+
+    db.query(`INSERT INTO role (title, salary, department_id)
       VALUES (?, ?, ?)`, [result.newTitle, result.newSalary, result.newDepartment_id], (err, res) => {
-        console.table(viewRoles())
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-      });
+      console.table(viewRoles())
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
     });
+  });
 }
+
 
 function addEmployees() {
   inquirer.prompt([
@@ -164,19 +164,18 @@ function addEmployees() {
       message: "Enter the manager_id of the new employee (enter null if none):",
       name: "newManager_id",
     }
-  ]).then ((result) => {
-      
+  ]).then((result) => {
+
     db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
       VALUES (?, ?, ?, ?)`, [result.newFirst_name, result.newLast_name, result.newRole_id, result.newManager_id], (err, res) => {
-        console.table(viewRoles())
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-      });
+      console.table(viewRoles())
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
     });
+  });
 }
-
 
 
 function updateEmployeeRole() {
@@ -191,17 +190,17 @@ function updateEmployeeRole() {
       message: "Enter the change in role_id:",
       name: "updatedRole"
     }
-  ]).then ((result) => {
-      // const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
-      // const params = [req.body.review, req.params.id];
-    
-      db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [result.updatedRole, result.updatedEmployee], (err, res) => {
-        console.table(viewEmployees())
-        if (err) {
-          res.status(400).json({ error: err.message });
-        } 
-      });
+  ]).then((result) => {
+    // const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+    // const params = [req.body.review, req.params.id];
+
+    db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [result.updatedRole, result.updatedEmployee], (err, res) => {
+      console.table(viewEmployees())
+      if (err) {
+        res.status(400).json({ error: err.message });
+      }
     });
+  });
 }
 
 app.use((req, res) => {
@@ -212,4 +211,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-choices();
+start();
